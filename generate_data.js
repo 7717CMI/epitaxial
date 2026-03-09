@@ -13,92 +13,216 @@ const regions = {
   "Middle East & Africa": ["GCC", "South Africa", "Rest of Middle East & Africa"]
 };
 
-// New segment definitions with market share splits (proportions within each segment type)
+// Segment definitions with market share splits (proportions within each segment type)
 const segmentTypes = {
-  "By Type": {
-    "Sub-Normothermic Perfusion (20–34°C)": 0.55,
-    "Warm or Normothermic Perfusion (35–37°C)": 0.45
+  "By Material Platform": {
+    "Silicon (Si) Epitaxial Wafers": 0.35,
+    "Silicon Carbide (SiC) Epitaxial Wafers": 0.25,
+    "Gallium Nitride (GaN) Epitaxial Wafers": 0.18,
+    "Gallium Arsenide (GaAs) Epitaxial Wafers": 0.14,
+    "Indium Phosphide (InP) Epitaxial Wafers": 0.08
   },
-  "By Organ Type": {
-    "Liver": 0.35,
-    "Heart": 0.22,
-    "Lung": 0.18,
-    "Kidney": 0.15,
-    "Others (Pancreas, Small bowel / Intestine, Composite Tissues / Limb Perfusion (emerging use cases))": 0.10
+  "By Wafer Diameter": {
+    "Less than Equal to 100mm (2\" and 4\")": 0.15,
+    "150mm (6\")": 0.25,
+    "200mm (8\")": 0.35,
+    "300mm (12\")": 0.25
   },
-  "Application / Use Case": {
-    "Organ Preservation": 0.30,
-    "Viability Assessment": 0.25,
-    "Physiologic Transport": 0.20,
-    "Reconditioning Marginal Organs": 0.15,
-    "Others (Research Use / Protocol development)": 0.10
+  "By Device Category": {
+    "Power Devices (MOSFET, IGBT, Diode)": 0.28,
+    "Logic Devices (CPU, GPU, ASIC)": 0.22,
+    "Memory Devices (DRAM, NAND)": 0.18,
+    "RF Devices (Amplifiers, RF Front-End)": 0.12,
+    "Optoelectronic Devices (LED, Laser, Photonics)": 0.12,
+    "Sensors & MEMS": 0.08
   },
-  "By End User": {
-    "Hospitals & Clinics": 0.40,
-    "Specialty Clinic/Centers": 0.25,
-    "Transplant Centers": 0.25,
-    "Others (Research Institutes/Centers, Organ Procurement Organizations, etc.)": 0.10
+  "By Customer Type": {
+    "Integrated Device Manufacturers (IDMs)": 0.45,
+    "Foundries": 0.35,
+    "Pure-Play Power Device Manufacturers": 0.20
+  },
+  "By Application": {
+    "Automotive": 0.22,
+    "Consumer Electronics": 0.24,
+    "Industrial & Energy": 0.18,
+    "Telecommunications": 0.12,
+    "Data Center & Computing": 0.11,
+    "Medical Devices": 0.07,
+    "Aerospace & Defense": 0.06
+  }
+};
+
+// Application sub-segments (share within parent)
+const applicationSubSegments = {
+  "Automotive": {
+    "EV Traction Inverters, OBC, DC-DC": 0.40,
+    "ADAS / Autonomous Systems": 0.28,
+    "Automotive Infotainment": 0.18,
+    "Automotive Lighting": 0.14
+  },
+  "Consumer Electronics": {
+    "Smartphones": 0.30,
+    "Laptops & PCs": 0.22,
+    "Tablets": 0.12,
+    "Wearables": 0.10,
+    "Gaming Devices": 0.14,
+    "Fast Chargers / Adapters": 0.12
+  },
+  "Industrial & Energy": {
+    "Industrial Motor Drives": 0.22,
+    "Factory Automation": 0.18,
+    "Robotics": 0.15,
+    "Renewable Energy Inverters (Solar/Wind)": 0.20,
+    "Smart Grid Infrastructure": 0.13,
+    "Energy Storage Systems": 0.12
+  },
+  "Telecommunications": {
+    "5G / 6G Base Stations": 0.35,
+    "Satellite Communication": 0.25,
+    "Fiber Optic Networks": 0.22,
+    "Radar Systems": 0.18
+  },
+  "Data Center & Computing": {
+    "Servers": 0.30,
+    "AI Accelerators": 0.30,
+    "GPUs": 0.25,
+    "Power Supply Units": 0.15
+  },
+  "Medical Devices": {
+    "Diagnostic Imaging Equipment": 0.28,
+    "Surgical Systems": 0.22,
+    "Implantable Electronics": 0.20,
+    "Monitoring Devices": 0.17,
+    "Laboratory Equipment": 0.13
+  },
+  "Aerospace & Defense": {
+    "Military Radar": 0.30,
+    "Avionics": 0.28,
+    "Secure Communication Systems": 0.24,
+    "Electronic Warfare": 0.18
   }
 };
 
 // Regional base values (USD Million) for 2021 - total market per region
-// Global Normothermic Machine Perfusion market ~$300M in 2021, growing ~12% CAGR
+// Global Epitaxial Wafer market ~$4.5B in 2021, growing ~9% CAGR
 const regionBaseValues = {
-  "North America": 120,
-  "Europe": 90,
-  "Asia Pacific": 50,
-  "Latin America": 20,
-  "Middle East & Africa": 15
+  "North America": 900,
+  "Europe": 750,
+  "Asia Pacific": 2200,
+  "Latin America": 200,
+  "Middle East & Africa": 150
 };
 
 // Country share within region (must sum to ~1.0)
 const countryShares = {
   "North America": { "U.S.": 0.82, "Canada": 0.18 },
-  "Europe": { "U.K.": 0.18, "Germany": 0.22, "Italy": 0.12, "France": 0.16, "Spain": 0.10, "Russia": 0.08, "Rest of Europe": 0.14 },
-  "Asia Pacific": { "China": 0.28, "India": 0.12, "Japan": 0.25, "South Korea": 0.12, "ASEAN": 0.10, "Australia": 0.07, "Rest of Asia Pacific": 0.06 },
+  "Europe": { "U.K.": 0.15, "Germany": 0.25, "Italy": 0.10, "France": 0.15, "Spain": 0.08, "Russia": 0.10, "Rest of Europe": 0.17 },
+  "Asia Pacific": { "China": 0.32, "India": 0.08, "Japan": 0.25, "South Korea": 0.15, "ASEAN": 0.10, "Australia": 0.04, "Rest of Asia Pacific": 0.06 },
   "Latin America": { "Brazil": 0.45, "Argentina": 0.15, "Mexico": 0.25, "Rest of Latin America": 0.15 },
   "Middle East & Africa": { "GCC": 0.45, "South Africa": 0.25, "Rest of Middle East & Africa": 0.30 }
 };
 
-// Growth rates (CAGR) per region - slightly different for variety
+// Growth rates (CAGR) per region
 const regionGrowthRates = {
-  "North America": 0.115,
-  "Europe": 0.108,
-  "Asia Pacific": 0.145,
-  "Latin America": 0.125,
-  "Middle East & Africa": 0.118
+  "North America": 0.088,
+  "Europe": 0.082,
+  "Asia Pacific": 0.105,
+  "Latin America": 0.092,
+  "Middle East & Africa": 0.078
 };
 
 // Segment-specific growth multipliers (relative to regional base CAGR)
 const segmentGrowthMultipliers = {
-  "By Type": {
-    "Sub-Normothermic Perfusion (20–34°C)": 0.95,
-    "Warm or Normothermic Perfusion (35–37°C)": 1.07
+  "By Material Platform": {
+    "Silicon (Si) Epitaxial Wafers": 0.85,
+    "Silicon Carbide (SiC) Epitaxial Wafers": 1.35,
+    "Gallium Nitride (GaN) Epitaxial Wafers": 1.40,
+    "Gallium Arsenide (GaAs) Epitaxial Wafers": 0.95,
+    "Indium Phosphide (InP) Epitaxial Wafers": 1.15
   },
-  "By Organ Type": {
-    "Liver": 1.08,
-    "Heart": 1.05,
-    "Lung": 1.12,
-    "Kidney": 0.95,
-    "Others (Pancreas, Small bowel / Intestine, Composite Tissues / Limb Perfusion (emerging use cases))": 1.20
+  "By Wafer Diameter": {
+    "Less than Equal to 100mm (2\" and 4\")": 0.75,
+    "150mm (6\")": 0.90,
+    "200mm (8\")": 1.10,
+    "300mm (12\")": 1.25
   },
-  "Application / Use Case": {
-    "Organ Preservation": 0.92,
-    "Viability Assessment": 1.15,
-    "Physiologic Transport": 1.05,
-    "Reconditioning Marginal Organs": 1.18,
-    "Others (Research Use / Protocol development)": 1.10
+  "By Device Category": {
+    "Power Devices (MOSFET, IGBT, Diode)": 1.20,
+    "Logic Devices (CPU, GPU, ASIC)": 1.05,
+    "Memory Devices (DRAM, NAND)": 0.90,
+    "RF Devices (Amplifiers, RF Front-End)": 1.15,
+    "Optoelectronic Devices (LED, Laser, Photonics)": 1.08,
+    "Sensors & MEMS": 1.12
   },
-  "By End User": {
-    "Hospitals & Clinics": 0.98,
-    "Specialty Clinic/Centers": 1.10,
-    "Transplant Centers": 1.08,
-    "Others (Research Institutes/Centers, Organ Procurement Organizations, etc.)": 1.05
+  "By Customer Type": {
+    "Integrated Device Manufacturers (IDMs)": 0.95,
+    "Foundries": 1.10,
+    "Pure-Play Power Device Manufacturers": 1.18
+  },
+  "By Application": {
+    "Automotive": 1.30,
+    "Consumer Electronics": 0.88,
+    "Industrial & Energy": 1.15,
+    "Telecommunications": 1.10,
+    "Data Center & Computing": 1.25,
+    "Medical Devices": 1.05,
+    "Aerospace & Defense": 0.95
   }
 };
 
-// Volume multiplier: units per USD Million (rough: ~500 units per $1M for perfusion devices)
-const volumePerMillionUSD = 480;
+// Sub-segment growth multipliers (relative to parent application growth)
+const subSegmentGrowthMultipliers = {
+  "Automotive": {
+    "EV Traction Inverters, OBC, DC-DC": 1.15,
+    "ADAS / Autonomous Systems": 1.20,
+    "Automotive Infotainment": 0.85,
+    "Automotive Lighting": 0.90
+  },
+  "Consumer Electronics": {
+    "Smartphones": 0.90,
+    "Laptops & PCs": 0.85,
+    "Tablets": 0.80,
+    "Wearables": 1.25,
+    "Gaming Devices": 1.10,
+    "Fast Chargers / Adapters": 1.30
+  },
+  "Industrial & Energy": {
+    "Industrial Motor Drives": 0.95,
+    "Factory Automation": 1.10,
+    "Robotics": 1.25,
+    "Renewable Energy Inverters (Solar/Wind)": 1.20,
+    "Smart Grid Infrastructure": 1.15,
+    "Energy Storage Systems": 1.18
+  },
+  "Telecommunications": {
+    "5G / 6G Base Stations": 1.20,
+    "Satellite Communication": 1.10,
+    "Fiber Optic Networks": 0.95,
+    "Radar Systems": 1.05
+  },
+  "Data Center & Computing": {
+    "Servers": 0.90,
+    "AI Accelerators": 1.35,
+    "GPUs": 1.20,
+    "Power Supply Units": 0.85
+  },
+  "Medical Devices": {
+    "Diagnostic Imaging Equipment": 0.95,
+    "Surgical Systems": 1.10,
+    "Implantable Electronics": 1.15,
+    "Monitoring Devices": 1.05,
+    "Laboratory Equipment": 0.90
+  },
+  "Aerospace & Defense": {
+    "Military Radar": 1.05,
+    "Avionics": 1.00,
+    "Secure Communication Systems": 1.10,
+    "Electronic Warfare": 1.08
+  }
+};
+
+// Volume multiplier: wafers per USD Million
+const volumePerMillionUSD = 850;
 
 // Seeded pseudo-random for reproducibility
 let seed = 42;
@@ -143,10 +267,30 @@ function generateData(isVolume) {
     data[regionName] = {};
     for (const [segType, segments] of Object.entries(segmentTypes)) {
       data[regionName][segType] = {};
-      for (const [segName, share] of Object.entries(segments)) {
-        const segGrowth = regionGrowth * segmentGrowthMultipliers[segType][segName];
-        const segBase = regionBase * share;
-        data[regionName][segType][segName] = generateTimeSeries(segBase, segGrowth, roundFn);
+
+      if (segType === "By Application") {
+        // For Application, generate hierarchical data with sub-segments
+        // Parent nodes get aggregated year data + child objects
+        for (const [segName, share] of Object.entries(segments)) {
+          const segGrowth = regionGrowth * segmentGrowthMultipliers[segType][segName];
+          const segBase = regionBase * share;
+          // Generate parent-level aggregated time series first
+          const parentSeries = generateTimeSeries(segBase, segGrowth, roundFn);
+          // Start parent node with year data (aggregated)
+          data[regionName][segType][segName] = { ...parentSeries, _aggregated: true, _level: 2 };
+          const subSegs = applicationSubSegments[segName];
+          for (const [subName, subShare] of Object.entries(subSegs)) {
+            const subGrowth = segGrowth * subSegmentGrowthMultipliers[segName][subName];
+            const subBase = segBase * subShare;
+            data[regionName][segType][segName][subName] = generateTimeSeries(subBase, subGrowth, roundFn);
+          }
+        }
+      } else {
+        for (const [segName, share] of Object.entries(segments)) {
+          const segGrowth = regionGrowth * segmentGrowthMultipliers[segType][segName];
+          const segBase = regionBase * share;
+          data[regionName][segType][segName] = generateTimeSeries(segBase, segGrowth, roundFn);
+        }
       }
     }
 
@@ -154,7 +298,6 @@ function generateData(isVolume) {
     data[regionName]["By Country"] = {};
     for (const country of countries) {
       const cShare = countryShares[regionName][country];
-      // Use a slight variation of region growth per country
       const countryGrowthVariation = 1 + (seededRandom() - 0.5) * 0.06;
       const countryBase = regionBase * cShare;
       const countryGrowth = regionGrowth * countryGrowthVariation;
@@ -171,12 +314,29 @@ function generateData(isVolume) {
       data[country] = {};
       for (const [segType, segments] of Object.entries(segmentTypes)) {
         data[country][segType] = {};
-        for (const [segName, share] of Object.entries(segments)) {
-          const segGrowth = countryGrowth * segmentGrowthMultipliers[segType][segName];
-          const segBase = countryBase * share;
-          // Add slight country-specific variation to segment share
-          const shareVariation = 1 + (seededRandom() - 0.5) * 0.1;
-          data[country][segType][segName] = generateTimeSeries(segBase * shareVariation, segGrowth, roundFn);
+
+        if (segType === "By Application") {
+          for (const [segName, share] of Object.entries(segments)) {
+            const segGrowth = countryGrowth * segmentGrowthMultipliers[segType][segName];
+            const segBase = countryBase * share;
+            const shareVariation = 1 + (seededRandom() - 0.5) * 0.1;
+            // Generate parent-level aggregated time series
+            const parentSeries = generateTimeSeries(segBase * shareVariation, segGrowth, roundFn);
+            data[country][segType][segName] = { ...parentSeries, _aggregated: true, _level: 2 };
+            const subSegs = applicationSubSegments[segName];
+            for (const [subName, subShare] of Object.entries(subSegs)) {
+              const subGrowth = segGrowth * subSegmentGrowthMultipliers[segName][subName];
+              const subBase = segBase * shareVariation * subShare;
+              data[country][segType][segName][subName] = generateTimeSeries(subBase, subGrowth, roundFn);
+            }
+          }
+        } else {
+          for (const [segName, share] of Object.entries(segments)) {
+            const segGrowth = countryGrowth * segmentGrowthMultipliers[segType][segName];
+            const segBase = countryBase * share;
+            const shareVariation = 1 + (seededRandom() - 0.5) * 0.1;
+            data[country][segType][segName] = generateTimeSeries(segBase * shareVariation, segGrowth, roundFn);
+          }
         }
       }
     }
@@ -200,4 +360,4 @@ console.log('Generated value.json and volume.json successfully');
 console.log('Value geographies:', Object.keys(valueData).length);
 console.log('Volume geographies:', Object.keys(volumeData).length);
 console.log('Segment types:', Object.keys(valueData['North America']));
-console.log('Sample - North America, By Type:', JSON.stringify(valueData['North America']['By Type'], null, 2));
+console.log('Sample - North America, By Material Platform:', JSON.stringify(valueData['North America']['By Material Platform'], null, 2));

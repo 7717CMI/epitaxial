@@ -1,28 +1,79 @@
 {
   "Global": {
-    "By Type": {
-      "Sub-Normothermic Perfusion (20–34°C)": {},
-      "Warm or Normothermic Perfusion (35–37°C)": {}
+    "By Material Platform": {
+      "Silicon (Si) Epitaxial Wafers": {},
+      "Silicon Carbide (SiC) Epitaxial Wafers": {},
+      "Gallium Nitride (GaN) Epitaxial Wafers": {},
+      "Gallium Arsenide (GaAs) Epitaxial Wafers": {},
+      "Indium Phosphide (InP) Epitaxial Wafers": {}
     },
-    "By Organ Type": {
-      "Liver": {},
-      "Heart": {},
-      "Lung": {},
-      "Kidney": {},
-      "Others (Pancreas, Small bowel / Intestine, Composite Tissues / Limb Perfusion (emerging use cases))": {}
+    "By Wafer Diameter": {
+      "Less than Equal to 100mm (2\" and 4\")": {},
+      "150mm (6\")": {},
+      "200mm (8\")": {},
+      "300mm (12\")": {}
     },
-    "Application / Use Case": {
-      "Organ Preservation": {},
-      "Viability Assessment": {},
-      "Physiologic Transport": {},
-      "Reconditioning Marginal Organs": {},
-      "Others (Research Use / Protocol development)": {}
+    "By Device Category": {
+      "Power Devices (MOSFET, IGBT, Diode)": {},
+      "Logic Devices (CPU, GPU, ASIC)": {},
+      "Memory Devices (DRAM, NAND)": {},
+      "RF Devices (Amplifiers, RF Front-End)": {},
+      "Optoelectronic Devices (LED, Laser, Photonics)": {},
+      "Sensors & MEMS": {}
     },
-    "By End User": {
-      "Hospitals & Clinics": {},
-      "Specialty Clinic/Centers": {},
-      "Transplant Centers": {},
-      "Others (Research Institutes/Centers, Organ Procurement Organizations, etc.)": {}
+    "By Customer Type": {
+      "Integrated Device Manufacturers (IDMs)": {},
+      "Foundries": {},
+      "Pure-Play Power Device Manufacturers": {}
+    },
+    "By Application": {
+      "Automotive": {
+        "EV Traction Inverters, OBC, DC-DC": {},
+        "ADAS / Autonomous Systems": {},
+        "Automotive Infotainment": {},
+        "Automotive Lighting": {}
+      },
+      "Consumer Electronics": {
+        "Smartphones": {},
+        "Laptops & PCs": {},
+        "Tablets": {},
+        "Wearables": {},
+        "Gaming Devices": {},
+        "Fast Chargers / Adapters": {}
+      },
+      "Industrial & Energy": {
+        "Industrial Motor Drives": {},
+        "Factory Automation": {},
+        "Robotics": {},
+        "Renewable Energy Inverters (Solar/Wind)": {},
+        "Smart Grid Infrastructure": {},
+        "Energy Storage Systems": {}
+      },
+      "Telecommunications": {
+        "5G / 6G Base Stations": {},
+        "Satellite Communication": {},
+        "Fiber Optic Networks": {},
+        "Radar Systems": {}
+      },
+      "Data Center & Computing": {
+        "Servers": {},
+        "AI Accelerators": {},
+        "GPUs": {},
+        "Power Supply Units": {}
+      },
+      "Medical Devices": {
+        "Diagnostic Imaging Equipment": {},
+        "Surgical Systems": {},
+        "Implantable Electronics": {},
+        "Monitoring Devices": {},
+        "Laboratory Equipment": {}
+      },
+      "Aerospace & Defense": {
+        "Military Radar": {},
+        "Avionics": {},
+        "Secure Communication Systems": {},
+        "Electronic Warfare": {}
+      }
     },
     "By Region": {
       "North America": {
